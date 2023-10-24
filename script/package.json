@@ -1,0 +1,22 @@
+{
+  "name": "Script",
+  "version": "1.0.0",
+  "description": "自动化脚本汇总",
+  "main": "index.js",
+  "repository": "git@github.com:MyNetdisk/Script.git",
+  "author": "DESKTOP-T63084Q\\MyNetdisk <peregrinator@yeah.net>",
+  "license": "MIT",
+  "scripts": {
+    "commit": "cz"
+  },
+  "devDependencies": {
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "pinyin": "2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
