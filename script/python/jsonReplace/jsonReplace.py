@@ -1,11 +1,17 @@
 import json
+import os
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+json1_path = os.path.join(script_dir,'json1.json')
+json2_path = os.path.join(script_dir,'json2.json')
 
 # Load the fisrt JSON file
-with open('json1.json','r') as file1:
+with open(json1_path,'r') as file1:
     json1_data = json.load(file1)
 
 # Load the second JSON file
-with open('json2.json','r') as file2:
+with open(json2_path,'r') as file2:
     json2_data = json.load(file2)
 
 def update_json(json1,json2):
@@ -28,8 +34,10 @@ def update_json(json1,json2):
 # Update the first JSON data using the second JSON
 update_json(json1_data,json2_data)
 
+update_path = os.path.join(script_dir, 'update.json')
+
 # Wirte the update JSON data back to a new file
-with open('update.json', 'w') as update_file:
+with open(update_path, 'w') as update_file:
     json.dump(json1_data,update_file,indent=4)
 
 print("Replacement completed and saved as 'update.json'")
