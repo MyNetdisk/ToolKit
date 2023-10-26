@@ -1,6 +1,21 @@
-## How to use
+# JSON字段替换脚本使用说明
 
-### example: python + "filePath"
+这个脚本旨在帮助你从一个 JSON 文件中加载数据，并使用第二个 JSON 文件中匹配的字段值来更新第一个 JSON 文件中的字段。这是一些基本的使用说明，以便你能够轻松地使用脚本来执行字段替换。
+
+## 步骤 1: 准备 JSON 文件
+
+在开始之前，请确保你已经准备好两个 JSON 文件，分别是 `json1.json` 和 `json2.json`。这些文件应该位于脚本所在的目录中，但你也可以根据需要修改文件名和路径。
+
+## 步骤 2: 运行脚本
+
+在命令提示符或终端中，导航到包含脚本的目录。然后执行以下命令：
+
 ```shell
-python3 D:\Project\Toolkit\script\python\jsonReplace\jsonReplace.py
+python jsonReplace.py
 ```
+
+## 步骤 2: 查看输出
+
+脚本将加载 `json1.json` 和 `json2.json` 中的数据，并执行字段值替换。替换后的数据将保存到 `update.json` 文件中。你可以使用文本编辑器或JSON查看器来查看生成的 `update.json` 文件，以查看字段替换的结果。
+
+这就是使用这个脚本的基本步骤。你可以根据需要对文件名、路径和数据进行自定义。如果你有任何问题或需要进一步的帮助，请随时提问。
