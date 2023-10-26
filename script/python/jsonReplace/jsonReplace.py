@@ -1,51 +1,59 @@
 import json
 import os
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
-json1_path = os.path.join(script_dir,'json1.json')
-json2_path = os.path.join(script_dir,'json2.json')
-
-# Load the fisrt JSON file
-with open(json1_path,'r',encoding='utf-8') as file1:
-    json1_data = json.load(file1)
-
-# Load the second JSON file
-with open(json2_path,'r',encoding='utf-8') as file2:
-    json2_data = json.load(file2)
-
-def update_json(json1,json2):
-    """Define a function to recursively update JSON data
+def load_json(file_path):
+    """Load a JSON file and return its contents.
 
     Args:
-        json1 (_type_): json file
-        json2 (_type_): json file
+        file_path (_type_): _description_
+
+    Returns:
+        _type_: _description_
     """
-    if isinstance(json1,dict) and isinstance(json2,dict):
-        for key, value in json1.items():
-            if key in json2:
-                json1[key] = json2[key]
-            else:
-                update_json(value,json2)
-    elif isinstance(json1,list) and isinstance(json2,list):
-        for i in range(len(json1)):
-            update_json(json1[i],json2[i])
-    elif isinstance(json1,dict) and isinstance(json2, list):
-        for key, value in json1.items():
+    with open(file_path,'r',encoding='utf-8') as file:
+        return json.load(file)
+
+def update_json_fields(json1,json2):
+    """Update JSON1 fields using matching values from JSON2 fields.
+
+    Args:
+        json1 (_type_): _description_
+        json2 (_type_): _description_
+    """
+    if isinstance(json1,dict) and isinstance(json2,list):
+        for key,value in json1.items():
+            matching_item = next((item for item in json2 if item.get('中文') == value), None)
+            if matching_item:
+                json1[key] = matching_item.get('葡文')
+            # 用于处理 JSON 数据中嵌套的字典情况
             if isinstance(value,dict):
-                update_json(value,json2)
-            else:
-                for item in json2:
-                    if value == item['中文']:
-                        json1[key] = item['葡文']
-                    
-# Update the first JSON data using the second JSON
-update_json(json1_data,json2_data)
+                update_json_fields(value,json2)
+    # TODO:处理其他情况（如 json1 和 json2 都是列表）...
 
-update_path = os.path.join(script_dir, 'update.json')
+def save_json(file_path,data):
+    """Save data as JSON to a file.
 
-# Wirte the update JSON data back to a new file
-with open(update_path, 'w', encoding='utf-8') as update_file:
-    json.dump(json1_data,update_file,ensure_ascii=False,indent=4)
+    Args:
+        file_path (_type_): _description_
+        data (_type_): _description_
+    """
+    with open(file_path, 'w', encoding='utf-8') as file:
+        json.dump(data,file,ensure_ascii=False,indent=4)
 
-print("Replacement completed and saved as 'update.json'")
+def main():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    json1_path = os.path.join(script_dir,'json1.json')
+    json2_path = os.path.join(script_dir,'json2.json')
+    update_path = os.path.join(script_dir, 'update.json')
+
+    json1_data = load_json(json1_path)
+    json2_data = load_json(json2_path)
+
+    update_json_fields(json1_data,json2_data)
+
+    save_json(update_path,json1_data)
+
+    print("Replacement completed and saved as 'update.json'")
+
+if __name__ == "__main__":
+    main()
