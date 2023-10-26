@@ -27,10 +27,12 @@ def categorize_commits_by_date(commit_logs):
         date_match = re.match(r'Date:\s+(\d{4}-\d{2}-\d{2})', line)
         if date_match:
             current_date = date_match.group(1)
-            commits_by_date[current_date] = []
+            if current_date not in commits_by_date:
+                commits_by_date[current_date] = []
 
         if current_date:
-            commits_by_date[current_date].append(line)
+            if not line.startswith("Date:"):
+                commits_by_date[current_date].append(line)
 
     return commits_by_date
 
@@ -39,7 +41,7 @@ def create_daily_report(commits_by_date):
     report = ""
     for date, commits in commits_by_date.items():
         report += f"Date: {date}\n"
-        report += "\n".join(commits) + "\n\n"
+        report += "\n".join(commit for commit in commits if not commit.startswith("commit") and not commit.startswith("Author")) + "\n\n"
 
     return report
 
