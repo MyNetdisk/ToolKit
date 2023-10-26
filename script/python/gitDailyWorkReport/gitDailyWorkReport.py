@@ -3,6 +3,7 @@ import re
 from docx import Document
 import os
 import argparse
+import datetime
 
 def get_git_commit_logs(author_name, repo_path=None):
     if repo_path:
@@ -10,9 +11,21 @@ def get_git_commit_logs(author_name, repo_path=None):
         repo_path = os.path.normpath(repo_path)  # 将路径规范化为适应当前操作系统的分隔符
         os.chdir(repo_path)
 
+    # Calculate the start and end of the current month
+    current_date = datetime.datetime.now()
+    start_date = current_date.replace(day=1).strftime("%Y-%m-%d")
+    end_date = (current_date.replace(day=1, month=current_date.month + 1) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+
+    print('start_date',start_date)
+    print('end_date',end_date)
+    
     try:
-        # 执行Git命令以获取特定提交人的提交记录
-        git_log = subprocess.check_output(['git', 'log', '--author=' + author_name, '--date=short'], universal_newlines=True, errors='ignore', encoding='utf-8')
+        git_log = subprocess.check_output(
+            ['git', 'log', '--author=' + author_name, '--date=short', f'--since={start_date}', f'--until={end_date}'],
+            universal_newlines=True,
+            errors='ignore',
+            encoding='utf-8'
+        )
         return git_log
     except subprocess.CalledProcessError:
         return "Error: Unable to retrieve Git commit logs."
