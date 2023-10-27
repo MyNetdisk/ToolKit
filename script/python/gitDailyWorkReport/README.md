@@ -26,11 +26,13 @@
 
     - `author_name`：要获取提交记录的作者名字。
     - `repo_path`（可选）：仓库的路径。如果不提供路径，将使用当前目录的仓库。
+    - `start_date`（可选）：开始日期(YYYY-MM-DD)。如果不提供开始日期，将使用当前月份的开始日期。
+    - `end_date`（可选）：截止日期(YYYY-MM-DD)。如果不提供截止日期，将使用当前月份的结束日期。
 
     示例：
 
     ```bash
-    python gitDailyWorkReport.py "John Doe" --repo_path D:\Project\biztable-fe\databook-web
+    python gitDailyWorkReport.py "John Doe" --repo_path D:\Project\biztable-fe\databook-web --start_date 2023-08-31 --end_date 2023-09-30
     ```
 
     这将获取 "John Doe" 的提交记录，并将其保存为 `daily_work_report.docx` 文件。
