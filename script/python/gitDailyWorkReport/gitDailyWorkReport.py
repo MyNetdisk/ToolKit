@@ -5,16 +5,30 @@ import os
 import argparse
 import datetime
 
-def get_git_commit_logs(author_name, repo_path=None):
+def get_git_commit_logs(author_name, repo_path=None, start_date=None, end_date=None):
+    """获取git提交记录
+
+    Args:
+        author_name (_type_): 提交人名称
+        repo_path (_type_, optional): 仓库路径. Defaults to None.
+        start_date (_type_, optional): 开始时间. Defaults to None.
+        end_date (_type_, optional): 截止时间. Defaults to None.
+
+    Returns:
+        _type_: 指定日期的git提交记录,默认为当月提交记录。
+    """
     if repo_path:
         # 如果提供了仓库路径，切换到该目录下
         repo_path = os.path.normpath(repo_path)  # 将路径规范化为适应当前操作系统的分隔符
         os.chdir(repo_path)
 
-    # Calculate the start and end of the current month
-    current_date = datetime.datetime.now()
-    start_date = current_date.replace(day=1).strftime("%Y-%m-%d")
-    end_date = (current_date.replace(day=1, month=current_date.month + 1) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    # 计算开始时间和截止时间 默认为当月时间
+    if not start_date:
+        current_date = datetime.datetime.now()
+        start_date = current_date.replace(day=1).strftime("%Y-%m-%d")
+    if not end_date:
+        current_date = datetime.datetime.now()
+        end_date = (current_date.replace(day=1, month=current_date.month + 1) - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
 
     print('start_date',start_date)
     print('end_date',end_date)
@@ -31,7 +45,14 @@ def get_git_commit_logs(author_name, repo_path=None):
         return "Error: Unable to retrieve Git commit logs."
 
 def categorize_commits_by_date(commit_logs):
-    # 将提交记录按日期分类
+    """将提交记录按日期分类
+
+    Args:
+        commit_logs (_type_): 指定日期的git提交记录
+
+    Returns:
+        _type_: 按日期分类的git提交记录
+    """
     commits_by_date = {}
     current_date = None
 
@@ -50,7 +71,14 @@ def categorize_commits_by_date(commit_logs):
     return commits_by_date
 
 def create_daily_report(commits_by_date):
-    # 在这里，你可以自定义如何构建每日工作报告
+    """在这里，你可以自定义如何构建每日工作报告
+
+    Args:
+        commits_by_date (_type_): 按日期分类的git提交记录
+
+    Returns:
+        _type_: 过滤的git提交记录
+    """
     report = ""
     for date, commits in commits_by_date.items():
         report += f"Date: {date}\n"
@@ -59,6 +87,12 @@ def create_daily_report(commits_by_date):
     return report
 
 def write_to_word_document(daily_report, author_name):
+    """将整理过的git提交记录写入word文档中
+
+    Args:
+        daily_report (_type_): 过滤的git提交记录
+        author_name (_type_): 提交人名称
+    """
     # 获取脚本所在的目录
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -76,18 +110,25 @@ def write_to_word_document(daily_report, author_name):
     doc.save(document_path)
 
 if __name__ == "__main__":
+    # 定义命令行参数
     parser = argparse.ArgumentParser(description="Get Git commit logs for a specific author.")
     parser.add_argument("author_name", type=str, help="Author name to filter Git commit logs.")
     parser.add_argument("--repo_path", type=str, help="Path to the Git repository (optional).")
+    parser.add_argument("--start_date", type=str, help="Start date (YYYY-MM-DD) for the time range (optional).")
+    parser.add_argument("--end_date", type=str, help="End date (YYYY-MM-DD) for the time range (optional).")
 
+    # 获取命令行参数
     args = parser.parse_args()
 
     # 指定要获取提交记录的特定提交人的名字
     author_name = args.author_name
     # 获取可选的仓库路径参数
     repo_path = args.repo_path
+    # 获取可选的时间段参数
+    start_date = args.start_date
+    end_date = args.end_date
 
-    git_commit_logs = get_git_commit_logs(author_name, repo_path)
+    git_commit_logs = get_git_commit_logs(author_name, repo_path, start_date, end_date)
     commits_by_date = categorize_commits_by_date(git_commit_logs)
     daily_report = create_daily_report(commits_by_date)
 
