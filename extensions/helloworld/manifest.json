@@ -1,0 +1,23 @@
+{
+    "name": "helloworld",
+    "version": "0.0.1",
+    "icons": {
+        "16": "icon.png",
+        "32": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    },
+    "manifest_version": 3,
+    "description": "helloworld by MyNetdisk",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*/*"
+            ],
+            "js": [
+                "lib/jquery-3.7.1.min.js",
+                "index.js"
+            ]
+        }
+    ]
+}
