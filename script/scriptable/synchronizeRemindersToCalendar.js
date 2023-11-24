@@ -61,7 +61,7 @@ function updateEvent(event,reminder){
     // 已完成事项
     if(reminder.isCompleted){
         event.title = `✅${reminder.title}`
-        event.isAllDay = true
+        event.isAllDay = false
         event.startDate = reminder.completionDate
         event.endDate = reminder.completionDate
         let period = (reminder.dueDate - reminder.completionDate)/1000/3600/24
