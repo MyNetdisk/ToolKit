@@ -49,3 +49,19 @@ if (this._needsScrollView()) {
 ```tsx
 onMomentumScrollEnd;
 ```
+
+使用示例
+
+```tsx
+<View style={{ height: 200 }}>
+  <Carousel
+    data={data}
+    renderItem={({ item, index }) => renderDeviceInfo(item, index)}
+    itemWidth={width * 0.8}
+    enableSnap={true}
+    swipeThreshold={20}
+    activeSlideOffset={20}
+    callbackOffsetMargin={5}
+  />
+</View>
+```
