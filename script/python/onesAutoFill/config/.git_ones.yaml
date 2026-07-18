@@ -1,0 +1,64 @@
+# ==========================================
+# Git 仓库提取配置
+# ==========================================
+git:
+  # 本地仓库的绝对路径（支持多仓库同步，可配置为列表）
+  repo_path: "/Users/yourname/projects/your-project"
+
+  # 需要同步的分支（留空则默认当前分支）
+  branches:
+    - main
+    - develop
+
+  # 提取范围限制（防止一次性拉取过多历史提交）
+  max_commits: 100
+
+  # 提交信息过滤关键词（只提取包含这些关键词的提交，例如 feat:, fix:）
+  include_keywords:
+    - "feat"
+    - "fix"
+    - "bug"
+
+# ==========================================
+# ONES 平台对接配置
+# ==========================================
+ones:
+  # ONES 组织域名（例如：https://your-org.ones.cn）
+  base_url: "https://your-org.ones.cn"
+
+  # 目标项目 UUID 或 ID
+  project_uuid: "your-project-uuid-here"
+
+  # API 认证令牌（强烈建议通过环境变量 ONES_TOKEN 读取，避免明文泄露）
+  # 代码中可这样获取：token = os.getenv("ONES_TOKEN", config['ones']['api_token'])
+  api_token: "your-ones-api-token"
+
+  # 同步到 ONES 的具体模块（如：workitem 需求/缺陷, commit 提交记录）
+  target_module: "commit"
+
+# ==========================================
+# 数据映射与清洗规则
+# ==========================================
+mapping:
+  # Git 提交作者与 ONES 用户邮箱的映射关系
+  # 当 Git 提交人邮箱与 ONES 用户不匹配时，可在此强制指定
+  author_map:
+    "zhangsan@company.com": "zhangsan@ones.cn"
+    "lisi@company.com": "lisi@ones.cn"
+
+  # 提交类型与 ONES 需求/缺陷类型的映射
+  type_map:
+    "feat": "story"      # 新功能 -> 用户故事
+    "fix": "bug"         # 修复 -> 缺陷
+    "refactor": "task"   # 重构 -> 任务
+    "default": "task"    # 其他默认归类为任务
+
+# ==========================================
+# 运行模式与日志
+# ==========================================
+runtime:
+  # 是否开启空跑模式（Dry Run）：True 时只打印日志，不实际调用 ONES API
+  dry_run: false
+
+  # 日志级别：DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"

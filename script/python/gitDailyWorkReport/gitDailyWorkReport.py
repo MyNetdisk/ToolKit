@@ -35,7 +35,7 @@ def get_git_commit_logs(author_name, repo_path=None, start_date=None, end_date=N
     
     try:
         git_log = subprocess.check_output(
-            ['git', 'log', '--author=' + author_name, '--date=short', f'--since={start_date}', f'--until={end_date}'],
+            ['git', 'logs', '--author=' + author_name, '--date=short', f'--since={start_date}', f'--until={end_date}'],
             universal_newlines=True,
             errors='ignore',
             encoding='utf-8'
